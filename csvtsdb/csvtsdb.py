@@ -6,7 +6,7 @@ import json
 from datetime import datetime, timezone
 
 from klein               import Klein
-from twisted.web.static  import File
+from twisted.logger      import Logger
 from werkzeug.exceptions import NotFound, BadRequest
 
 class CsvTsdb():
@@ -17,21 +17,26 @@ class CsvTsdb():
     app = Klein()
 
     def __init__(self, filename):
+        self.log      = Logger()
         self.filename = filename
+        self.log.info("CsvTsdb on file {file}", file=self.filename)
 
     @app.route('/', methods=['POST'])
     def save(self, request):
         try:
-            data = request.content.read().decode('utf-8')
-            label, number = data.rsplit(maxsplit=1)
-            number = float(number)
+            data = request.content.read().decode('utf-8').strip()
+            try:
+                label, value = data.rsplit(maxsplit=1)
+                value = float(value)
+            except ValueError as e:  # didn't parse as "label something 47" => assume it is just a label without number
+                label, value = data, 1.0  # no value => value 1 (for ease of use)
             if '"' in label: raise ValueError('label may not contain a " (double quote)')
             if ',' in label: raise ValueError('label may not contain a , (comma)')
         except ValueError as e:
             raise BadRequest(e) from e
 
         ts = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
-        csv_line = '{}, "{}", {}\n'.format(ts, label, number)
+        csv_line = '{}, "{}", {}\n'.format(ts, label, value)
         with open(self.filename, 'a') as f:
             f.write(csv_line)
 
@@ -54,6 +59,7 @@ class CsvTsdb():
 
     @app.handle_errors(BadRequest)
     def handle_errors(self, request, failure):
+        self.log.warn(str(failure))
         request.setResponseCode(failure.value.code)
         request.setHeader('Content-Type', 'text/plain')
         return failure.getErrorMessage()
