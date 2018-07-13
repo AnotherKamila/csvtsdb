@@ -8,7 +8,7 @@ except ImportError:
     read_md = lambda f: open(f, 'r').read()
 
 setup(name='csvtsdb',
-    version='0.1.6',
+    version='0.1.7',
     description='CSV-backed timeseries database usable standalone or as a Twisted resource',
     long_description=read_md('README.md'),
     url='http://github.com/anotherkamila/csvtsdb',
