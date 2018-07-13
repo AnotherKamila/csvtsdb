@@ -3,7 +3,7 @@ CSV-backed timeseries database. Usable standalone or in a Twisted application.
 
 [![PyPI](https://img.shields.io/pypi/v/csvtsdb.svg)](https://pypi.org/project/csvtsdb/)
 [![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/AnotherKamila)
-[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/anotherkamila/songbook-web/issues)
+[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/anotherkamila/csvtsdb/issues)
 
 
 Not your typical timeseries database:
