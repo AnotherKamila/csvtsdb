@@ -5,5 +5,5 @@ hyperlink==18.0.0
 idna==2.6
 incremental==17.5.0
 six==1.11.0
-Twisted==17.9.0
+Twisted==22.10.0
 zope.interface==4.4.3
